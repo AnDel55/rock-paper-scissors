@@ -11,3 +11,13 @@ function getComputerChoice() {
     }
 
 }
+
+function getHumanChoice() {
+    let humanChoice = prompt('Enter rock, paper or scissors').toLowerCase();
+
+    if(humanChoice != 'rock' || 'paper' || 'scissors') {
+        return 'Wrong input'
+    } else {
+        return humanChoice
+    }
+}
