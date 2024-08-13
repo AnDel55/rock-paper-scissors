@@ -1,71 +1,76 @@
+const options = document.querySelectorAll('.option');
+const playerScoreDisplay = document.querySelector('.player-score');
+const computerScoreDisplay = document.querySelector('.computer-score');
+
+let playerScore = 0;
+let computerScore = 0;
+
+let playerChoice = '';
+let computerChoice = '';
+
+function updateDisplay() {
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+}
+
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+}
+
 function getComputerChoice() {
     let randomNum = Math.floor(Math.random() * 3)
 
     switch(randomNum) {
         case 0:
-            console.log('Computer chose: rock');
-            return 'rock';
+            computerChoice = 'rock';
+            break;
         case 1:
-            console.log('Computer chose: paper');
-            return 'paper';
+            computerChoice = 'paper';
+            break;
         case 2:
-            console.log('Computer chose: scissors');
-            return 'scissors';
+            computerChoice = 'scissors';
+            break;
     }
 
 }
 
-function getHumanChoice() {
-    let choice = prompt('Enter rock, paper or scissors').toLowerCase();
+function playRound() {
+    if(playerChoice === 'rock' && computerChoice === 'scissors' ||
+        playerChoice === 'paper' && computerChoice === 'rock' ||
+        playerChoice === 'scissors' && computerChoice === 'paper') {
+        playerScore++;
+        playerScoreDisplay.textContent = playerScore;
+    } else if(playerChoice == computerChoice) {
 
-    while(choice !== 'rock' && choice !== 'paper' && choice !== 'scissors') {
-        choice = prompt('Wrong input, enter rock, paper or scissors').toLowerCase();
-    }
-
-    console.log(`You chose: ${choice}`);
-    return choice
-}
-
-let humanScore = 0;
-let computerScore = 0;
-
-function playRound(humanChoice, computerChoice) {
-    if(humanChoice === 'rock' && computerChoice === 'scissors' ||
-        humanChoice === 'paper' && computerChoice === 'rock' ||
-        humanChoice === 'scissors' && computerChoice === 'paper') {
-        humanScore++;
-        return 'You win this round'
-    } else if(humanChoice == computerChoice) {
-        return 'Tie'
     } else {
         computerScore++;
-        return 'Computer win this round'
-    }
-}
-
-
-
-function playGame() {
-    for(let i=1; i <= 5; i++) {
-        console.log(`Round: ${i}`);
-        let humanChoice = getHumanChoice();
-        let computerChoice = getComputerChoice();
-
-        if(humanChoice == 'Wrong input') {
-            i--;
-        }
-
-        console.log(playRound(humanChoice, computerChoice));
-        console.log(`User score: ${humanScore}, Computer score: ${computerScore}`);
+        computerScoreDisplay.textContent = computerScore;
     }
 
-    if(humanScore > computerScore) {
-        return 'You won the game!'
-    } else if(computerScore > humanScore) {
-        return 'Computer won the game'
-    } else {
-        return 'The game is a tie'
-    }
-}
+    updateDisplay();
 
-console.log(playGame());
+    if (playerScore === 5) {
+        alert('Congratulations! You won the game!');
+        setTimeout(resetGame, 500);
+    } else if (computerScore === 5) {
+        alert('Sorry, the computer won the game.');
+        setTimeout(resetGame, 500);
+    }
+}  
+
+options.forEach((option) => {
+    option.addEventListener('click', (e) => {
+        playerChoice = e.target.id;
+        getComputerChoice();
+        playRound();
+    })
+})
+
+// function playGame() {
+//     
+// }
+
+// playGame();
